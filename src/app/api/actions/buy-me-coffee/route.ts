@@ -14,7 +14,11 @@ import {
   SystemProgram,
   Transaction,
 } from "@solana/web3.js";
-import { DEFAULT_SOL_ADDRESS, UNIT_COFFEE_PRICE } from "./const";
+import {
+  DEFAULT_SOL_ADDRESS,
+  UNIT_COFFEE_PRICE,
+  DEFAULT_COFFEE_AMOUNT,
+} from "./const";
 
 // Utility function for error responses
 const createErrorResponse = (message: string, status: number = 400) => {
@@ -27,7 +31,7 @@ const createErrorResponse = (message: string, status: number = 400) => {
 // Validate and parse query parameters
 const getValidatedQueryParams = (requestUrl: URL) => {
   let toPubkey: PublicKey = DEFAULT_SOL_ADDRESS;
-  let amount: number = UNIT_COFFEE_PRICE;
+  let amount: number = DEFAULT_COFFEE_AMOUNT;
 
   try {
     const toParam = requestUrl.searchParams.get("to");
@@ -99,7 +103,7 @@ export const GET = async (req: Request) => {
       },
     };
 
-    return new Response(JSON.stringify(payload), {
+    return Response.json(payload, {
       headers: ACTIONS_CORS_HEADERS,
     });
   } catch (err) {

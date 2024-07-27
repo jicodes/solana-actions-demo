@@ -5,3 +5,5 @@ export const DEFAULT_SOL_ADDRESS: PublicKey = new PublicKey(
 );
 
 export const UNIT_COFFEE_PRICE: number = 0.05;
+
+export const DEFAULT_COFFEE_AMOUNT: number = 1.0;
