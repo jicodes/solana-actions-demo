@@ -48,7 +48,7 @@ const getValidatedQueryParams = (requestUrl: URL) => {
       amount = parseFloat(amountParam);
     }
 
-    if (amount < 1) throw new Error("Amount is too small");
+    if (amount <= 0) throw new Error("Amount is too small");
   } catch (err) {
     throw new Error("Invalid input query parameter: amount");
   }
@@ -155,7 +155,7 @@ export const POST = async (req: Request) => {
     const transferSolInstruction = SystemProgram.transfer({
       fromPubkey: account,
       toPubkey: toPubkey,
-      lamports: totalAmount * LAMPORTS_PER_SOL,
+      lamports: Math.round(totalAmount * LAMPORTS_PER_SOL),
     });
 
     // Create a legacy transaction
