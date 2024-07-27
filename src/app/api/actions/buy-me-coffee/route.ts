@@ -44,7 +44,7 @@ const getValidatedQueryParams = (requestUrl: URL) => {
       amount = parseFloat(amountParam);
     }
 
-    if (amount <= 0) throw new Error("Amount is too small");
+    if (amount < 1) throw new Error("Amount is too small");
   } catch (err) {
     throw new Error("Invalid input query parameter: amount");
   }
