@@ -150,7 +150,7 @@ export const POST = async (req: Request) => {
     }
 
     // Create an instruction to transfer native SOL from one wallet to another
-    const transferSolInstruction = SystemProgram.transfer({
+    const instruction = SystemProgram.transfer({
       fromPubkey: account,
       toPubkey: toPubkey,
       lamports: Math.round(totalAmount * LAMPORTS_PER_SOL),
@@ -165,7 +165,7 @@ export const POST = async (req: Request) => {
       feePayer: account,
       blockhash,
       lastValidBlockHeight,
-    }).add(transferSolInstruction);
+    }).add(instruction);
 
     const payload: ActionPostResponse = await createPostResponse({
       fields: {
