@@ -31,7 +31,9 @@ export const GET = (req: Request) => {
 };
 
 // mock options method to allow CORS preflight requests
-export const OPTIONS = GET;
+export const OPTIONS = async (req: Request) => {
+  return new Response(null, { headers: ACTIONS_CORS_HEADERS });
+};
 
 // Return a signable transaction for the user to sign
 export const POST = async (req: Request) => {
