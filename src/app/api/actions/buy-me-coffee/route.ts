@@ -114,8 +114,10 @@ export const GET = async (req: Request) => {
   }
 };
 
-// Ensure CORS works for Blinks by including the OPTIONS HTTP method
-export const OPTIONS = GET;
+// Ensure CORS works for Blinks by including the OPTIONS HTTP method for preflight requests
+export const OPTIONS = async (req: Request) => {
+  return new Response(null, { headers: ACTIONS_CORS_HEADERS });
+};
 
 export const POST = async (req: Request) => {
   try {
@@ -147,16 +149,16 @@ export const POST = async (req: Request) => {
       throw new Error(`Account may not be rent exempt: ${toPubkey.toBase58()}`);
     }
 
-    // Get the latest blockhash
-    const { blockhash, lastValidBlockHeight } =
-      await connection.getLatestBlockhash();
-
     // Create an instruction to transfer native SOL from one wallet to another
     const transferSolInstruction = SystemProgram.transfer({
       fromPubkey: account,
       toPubkey: toPubkey,
       lamports: Math.round(totalAmount * LAMPORTS_PER_SOL),
     });
+
+    // Get the latest blockhash
+    const { blockhash, lastValidBlockHeight } =
+      await connection.getLatestBlockhash();
 
     // Create a legacy transaction
     const transaction = new Transaction({
@@ -168,7 +170,7 @@ export const POST = async (req: Request) => {
     const payload: ActionPostResponse = await createPostResponse({
       fields: {
         transaction,
-        message: `Send ${totalAmount} SOL to ${toPubkey.toBase58()}`,
+        message: `Tip ${amount} Coffee to ${toPubkey.toBase58()}`,
       },
       // Note: no additional signers are needed
       // signers: [],
